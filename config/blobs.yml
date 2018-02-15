@@ -18,6 +18,9 @@ busybox/busybox-1.27.2.tar.gz:
   size: 692898
   object_id: ed3e7c60-5c94-4359-6c7a-a56eeeffb1de
   sha: 728ef13c40e4a091b22a657a22396b3d985af346
+containerd/containerd-1.0.2.linux-amd64.tar.gz:
+  size: 19521093
+  sha: 66aacedc6ab826f720e0c9d480d19767839ad772
 golang/go1.9.4.linux-amd64.tar.gz:
   size: 105600650
   object_id: 18175389-972e-441f-68a6-101cc4514511
