@@ -10,6 +10,8 @@ export GOROOT=$(readlink -nf /var/vcap/packages/golang)
 export GOPATH=$BOSH_INSTALL_TARGET
 export PATH=$GOROOT/bin:$PATH
 
+rm -rf "${GOPATH}/src/github.com/containerd/containerd/vendor/github.com/opencontainers/runtime-spec"
+
 go install -tags daemon code.cloudfoundry.org/guardian/cmd/gdn
 go install code.cloudfoundry.org/guardian/cmd/dadoo
 go install code.cloudfoundry.org/guardian/cmd/socket2me

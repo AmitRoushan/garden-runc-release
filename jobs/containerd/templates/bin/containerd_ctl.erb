@@ -8,13 +8,20 @@ LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 DATA_DIR=/var/vcap/data/$JOB_NAME
 STATE_DIR=/var/vcap/store/$JOB_NAME
 PID_FILEPATH=$RUN_DIR/$JOB_NAME.pid
-CONFIG_FILEPATH=/var/vcap/jobs/$JOB_NAME/config/config.toml
+CONFIG_FILEPATH="${RUN_DIR}/config.toml"
+MAXIMUS="$( /var/vcap/packages/garden-idmapper/bin/maximus )"
 
 export PATH=$PATH:/var/vcap/packages/containerd/bin
 export PATH=$PATH:/var/vcap/packages/runc/bin
+export PATH=$PATH:/var/vcap/packages/guardian/bin
 
 create_dirs() {
   mkdir -p $RUN_DIR $LOG_DIR $DATA_DIR $STATE_DIR
+  chown vcap:4294967294 $DATA_DIR
+  chown 4294967294:4294967294 $STATE_DIR
+  chown 4294967294:4294967294 $RUN_DIR
+  cp /var/vcap/jobs/containerd/config/config.toml "${CONFIG_FILEPATH}"
+  chown 4294967294:4294967294 "$CONFIG_FILEPATH"
 }
 
 write_pidfile() {
@@ -25,7 +32,7 @@ start_containerd() {
   log "starting containerd"
   exec 1>> $LOG_DIR/containerd.stdout.log
   exec 2>> $LOG_DIR/containerd.stderr.log
-  exec containerd -c $CONFIG_FILEPATH
+  exec execas --uid "$MAXIMUS" --gid "$MAXIMUS" /var/vcap/packages/containerd/bin/containerd -c "$CONFIG_FILEPATH"
 }
 
 stop_containerd() {
